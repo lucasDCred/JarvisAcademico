@@ -11,11 +11,11 @@ O projeto utiliza busca semântica com embeddings e recuperação vetorial para 
 * Consulta de documentos PDF utilizando RAG
 * Busca semântica por embeddings
 * Geração de respostas contextualizadas
+* Montegam de plano de estudos
 * Sistema de memória de conversa
 * Gerenciamento de tarefas
 * Consulta de agenda
 * Sistema de logs
-* Extração de palavras-chave dos documentos
 
 # Tecnologias Utilizadas
 
@@ -33,7 +33,7 @@ O projeto utiliza busca semântica com embeddings e recuperação vetorial para 
 * rag/ → implementação do RAG
 * logs/ → histórico das interações
 * IAmemoria/ → memória da IA
-* main.py → código principal
+* main.py → código principal e contextos
 
 # Instalação
 
@@ -90,6 +90,7 @@ Exemplos:
 * “Como funciona a fotossíntese?”
 * “Quais tarefas eu tenho?”
 * “Qual minha agenda de hoje?”
+* “Poderia fazer um plano de estudos?”
 
 # Estratégia de RAG
 

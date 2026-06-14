@@ -59,7 +59,7 @@ while True:
     contexto_sistema = f"""
     Você é um assistente inteligente para estudantes.
 
-    Atual data, hora e dia da semana exata: {data_hora_semana}.
+    Atual data, hora e dia da semana exata: {data_hora_semana}
 
     Esta é a agenda real do usuário:
 

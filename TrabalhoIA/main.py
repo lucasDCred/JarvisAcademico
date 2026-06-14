@@ -16,7 +16,7 @@ from ferramentas.rag_tool import buscar_material_rag # Ferramenta RAG
 from ferramentas.palavraChave import obter_palavras_chave # Ferramenta de palavras-chave
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-client = OpenAI(base_url='https://llm.liaufms.org/v1/gemma-3-12b-it', api_key='Cxt2ftLF7d3mHS2JdiFqB-eSDAQeZvFATPXPs02lV9A') # Conexão com Gemma
+client = OpenAI(base_url='https://llm.liaufms.org/v1/qwen2-5-14b-instruct-awq', api_key = 'REIkURcI7rTTqsTwlJi8MrgnKFwOiqky7Ezh7hH-l-k') # Conexão com Gemma
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -40,8 +40,11 @@ while True:
         print("Encerrando...")
         break
 
-    # Data atual
-    data_hoje = datetime.now().strftime("%d/%m/%Y")
+    # Data atual, hora atual e dia da semana atual
+    dias_semana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"]
+    agora = datetime.now()
+    data_hora_semana = f"{dias_semana[agora.weekday()]}, {agora.strftime('%d/%m/%Y %H:%M')}"
+    
 
     dados_agenda = consultar_agenda() # Consulta agenda do usuário
 
@@ -56,7 +59,7 @@ while True:
     contexto_sistema = f"""
     Você é um assistente inteligente para estudantes.
 
-    Hoje é {data_hoje}.
+    Atual data, hora e dia da semana exata: {data_hora_semana}.
 
     Esta é a agenda real do usuário:
 
@@ -86,13 +89,17 @@ while True:
 
     CONCLUIR_TAREFA: numero
 
+    Quando o usuário pedir um plano de estudos, cronograma de estudos ou perguntar o que deve priorizar, responda somente:
+
+    PLANO_ESTUDOS
+
     Não invente informações e seja direto ao ponto.
     """
     #============================================================================
 
     # Modelo de IA, Contexto da IA + memória
     resposta = client.chat.completions.create(
-        model='google/gemma-3-12b-it',
+        model='Qwen/Qwen2.5-14B-Instruct-AWQ',
         messages=[{"role": "system", "content": contexto_sistema}] + memoria + [{"role": "user", "content": pergunta}])
 
     mensagem = resposta.choices[0].message.content # Guarda resposta da IA
@@ -118,17 +125,7 @@ while True:
         # Segunda chamada da IA
         resposta_rag = client.chat.completions.create(
             model='google/gemma-3-12b-it',
-            messages=[
-                {
-                    "role": "system",
-                    "content": contexto_rag_sistema
-                },
-                {
-                    "role": "user",
-                    "content": pergunta
-                }
-            ]
-        )
+            messages=[{"role": "system", "content": contexto_rag_sistema}, {"role": "user", "content": pergunta}])
 
         mensagem = resposta_rag.choices[0].message.content # Atualiza resposta final
 
@@ -145,6 +142,35 @@ while True:
         id_tarefa = int(mensagem.replace("CONCLUIR_TAREFA:", "").strip()) # Extrai ID
 
         mensagem = concluir_tarefa(id_tarefa) # Conclui tarefa
+
+    # Plano de estudos
+    elif mensagem.startswith("PLANO_ESTUDOS"):
+
+        plano_estudo = f"""
+        Você é um orientador de estudos e deve utilizar as seguintes informações:
+
+        Atual data, hora e dia da semana exata: {data_hora_semana}
+
+        Agenda do usuário:
+
+        {dados_agenda}
+
+        Tarefas do usuário:
+
+        {dados_tarefas}
+
+        Materiais disponíveis para estudo:
+
+        {palavras_chave}
+
+        Monte um plano de estudos objetivo, indicando prioridades e ordem de estudo.
+        """
+
+        plano_estudo = client.chat.completions.create(
+            model='Qwen/Qwen2.5-14B-Instruct-AWQ',
+            messages=[{"role": "system", "content": plano_estudo}, {"role": "user", "content": pergunta}])
+        
+        mensagem = plano_estudo.choices[0].message.content
     
     
     # Salvamento final

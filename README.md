@@ -11,7 +11,7 @@ O projeto utiliza busca semântica com embeddings e recuperação vetorial para 
 * Consulta de documentos PDF utilizando RAG
 * Busca semântica por embeddings
 * Geração de respostas contextualizadas
-* Montegam de plano de estudos
+* Montagem de plano de estudos
 * Sistema de memória de conversa
 * Gerenciamento de tarefas
 * Consulta de agenda

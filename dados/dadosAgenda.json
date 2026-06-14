@@ -1,0 +1,34 @@
+[
+    {
+        "tipo": "aula",
+        "dia": "segunda",
+        "disciplina": "Inteligência Artificial",
+        "inicio": "18:30",
+        "fim": "22:40"
+    },
+
+    {
+        "tipo": "prova",
+        "data": "16/07/2026",
+        "disciplina": "Inteligência Artificial",
+        "nome": "Prova de Regressão Logística",
+        "inicio": "20:00",
+        "fim": "21:30"
+    },
+
+    {
+        "tipo": "trabalho",
+        "data": "20/07/2026",
+        "disciplina": "Banco de Dados",
+        "nome": "Entrega Projeto SQL",
+        "fim": "23:59"
+    },
+
+    {
+        "tipo": "atividade",
+        "data": "22/07/2026",
+        "disciplina": "Interação Humano Computador",
+        "nome": "Fazer Resumo",
+        "fim": "20:00"
+    }
+]
